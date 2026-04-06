@@ -3,26 +3,49 @@ cmake_minimum_required(VERSION 3.22)
 # STM32CubeMX generated symbols (macros)
 set(MX_Defines_Syms 
 	USE_HAL_DRIVER 
-	STM32H563xx
+	STM32H563xx 
+	FX_INCLUDE_USER_DEFINE_FILE 
+	LX_INCLUDE_USER_DEFINE_FILE 
+	TX_INCLUDE_USER_DEFINE_FILE 
+	UX_INCLUDE_USER_DEFINE_FILE
     $<$<CONFIG:Debug>:DEBUG>
 )
 # STM32CubeMX generated include paths
 set(MX_Include_Dirs
-    ${CMAKE_SOURCE_DIR}/Core/Inc
+    ${CMAKE_SOURCE_DIR}/FileX/App
     ${CMAKE_SOURCE_DIR}/../Secure_nsclib
+    ${CMAKE_SOURCE_DIR}/FileX/Target
+    ${CMAKE_SOURCE_DIR}/LevelX/App
+    ${CMAKE_SOURCE_DIR}/LevelX/Target
+    ${CMAKE_SOURCE_DIR}/Core/Inc
+    ${CMAKE_SOURCE_DIR}/AZURE_RTOS/App
+    ${CMAKE_SOURCE_DIR}/USBX/App
+    ${CMAKE_SOURCE_DIR}/USBX/Target
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Inc
     ${CMAKE_SOURCE_DIR}/../Drivers/CMSIS/Device/ST/STM32H5xx/Include
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/inc
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/inc
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/inc
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/ports/generic/inc
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/inc
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/ports/generic/inc
     ${CMAKE_SOURCE_DIR}/../Drivers/CMSIS/Include
 )
 # STM32CubeMX generated application sources
 set(MX_Application_Src
+    ${CMAKE_SOURCE_DIR}/FileX/App/app_filex.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/tx_initialize_low_level.S
     ${CMAKE_SOURCE_DIR}/Core/Src/main.c
     ${CMAKE_SOURCE_DIR}/Core/Src/memorymap.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/app_threadx.c
     ${CMAKE_SOURCE_DIR}/Core/Src/stm32h5xx_it.c
     ${CMAKE_SOURCE_DIR}/Core/Src/stm32h5xx_hal_msp.c
     ${CMAKE_SOURCE_DIR}/Core/Src/sysmem.c
     ${CMAKE_SOURCE_DIR}/Core/Src/syscalls.c
+    ${CMAKE_SOURCE_DIR}/AZURE_RTOS/App/app_azure_rtos.c
+    ${CMAKE_SOURCE_DIR}/LevelX/Target/lx_stm32_nand_custom_driver.c
     ${CMAKE_SOURCE_DIR}/Core/Startup/startup_stm32h563xx.s
 )
 
@@ -45,6 +68,514 @@ set(STM32_Drivers_Src
 
 # Drivers Midllewares
 
+set(LevelX_Src
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_256byte_ecc_check.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_256byte_ecc_compute.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_close.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_defragment.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_driver_block_erase.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_driver_block_erased_verify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_driver_block_status_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_driver_block_status_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_driver_page_erased_verify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_extended_cache_enable.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_open.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_page_ecc_check.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_page_ecc_compute.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_partial_defragment.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_sector_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_sector_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_sector_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_system_error.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_block_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_block_data_move.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_block_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_block_mapping_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_block_status_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_data_page_copy.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_erase_count_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_format.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_free_block_list_add.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_mapped_block_list_add.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_mapped_block_list_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_mapped_block_list_remove.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_memory_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_metadata_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_metadata_build.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_metadata_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_sectors_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_sectors_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/levelx/common/src/lx_nand_flash_sectors_write.c
+)
+set(USBX_Src
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_debug_callback_register.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_debug_log.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_delay_ms.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_descriptor_pack.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_descriptor_parse.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_error_callback_register.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_event_flags_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_event_flags_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_event_flags_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_event_flags_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_long_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_long_get_big_endian.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_long_put.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_long_put_big_endian.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_allocate_add_safe.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_allocate_mulc_safe.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_allocate_mulv_safe.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_compare.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_copy.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_free.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_byte_pool_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_byte_pool_search.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_memory_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_mutex_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_mutex_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_mutex_off.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_mutex_on.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_pci_class_scan.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_pci_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_pci_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_physical_address.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_semaphore_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_semaphore_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_semaphore_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_semaphore_put.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_set_interrupt_handler.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_short_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_short_get_big_endian.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_short_put.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_short_put_big_endian.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_string_length_check.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_string_length_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_string_to_unicode.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_thread_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_thread_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_thread_identify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_thread_relinquish.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_thread_resume.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_thread_schedule_other.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_thread_sleep.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_thread_suspend.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_timer_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_timer_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_unicode_to_string.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_utility_virtual_address.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_system_error_handler.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_system_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/usbx/common/core/src/ux_system_uninitialize.c
+)
+set(FileX_Src
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_attributes_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_attributes_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_default_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_default_get_copy.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_default_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_entry_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_entry_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_exFAT_entry_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_exFAT_entry_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_exFAT_free_search.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_exFAT_unicode_entry_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_first_entry_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_first_full_entry_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_free_search.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_information_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_local_path_clear.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_local_path_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_local_path_get_copy.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_local_path_restore.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_local_path_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_long_name_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_long_name_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_name_extract.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_name_test.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_next_entry_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_next_full_entry_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_rename.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_search.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_short_name_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_directory_short_name_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_add_bitmap_log.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_add_checksum_log.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_add_dir_log.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_add_FAT_log.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_apply_logs.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_calculate_checksum.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_cleanup_FAT_chain.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_create_log_file.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_enable.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_read_directory_sector.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_read_FAT.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_read_log_file.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_recover.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_reset_log_file.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_set_FAT_chain.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_transaction_end.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_transaction_fail.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_transaction_start.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_fault_tolerant_write_log_file.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_attributes_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_attributes_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_best_effort_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_close.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_date_time_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_extended_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_extended_best_effort_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_extended_relative_seek.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_extended_seek.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_extended_truncate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_extended_truncate_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_open.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_relative_seek.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_rename.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_seek.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_truncate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_truncate_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_file_write_notify_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_abort.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_boot_info_extract.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_cache_invalidate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_check.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_check_FAT_chain_check.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_check_lost_cluster_check.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_close.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_close_notify_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_exFAT_format.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_extended_space_available.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_flush.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_format.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_format_oem_name_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_format_type_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_format_volume_id_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_open.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_open_notify_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_space_available.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_volume_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_volume_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_volume_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_media_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_partition_offset_calculate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_system_date_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_system_date_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_system_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_system_time_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_system_time_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_system_timer_entry.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_directory_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_directory_entry_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_directory_entry_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_directory_rename.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_directory_search.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_file_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_file_rename.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_length_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_length_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_name_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_name_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_short_name_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_unicode_short_name_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_16_unsigned_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_16_unsigned_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_32_unsigned_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_32_unsigned_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_64_unsigned_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_64_unsigned_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_absolute_path_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_allocate_new_cluster.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_bitmap_cache_prepare.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_bitmap_cache_update.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_bitmap_flush.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_bitmap_free_cluster_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_bitmap_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_bitmap_start_sector_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_cluster_free.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_cluster_state_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_cluster_state_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_geometry_check.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_name_hash_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_size_calculate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_system_area_checksum_verify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_system_area_checksum_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_system_area_format.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_system_sector_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_unicode_name_hash_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_exFAT_upcase_table.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_FAT_entry_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_FAT_entry_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_FAT_flush.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_FAT_map_flush.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_FAT_sector_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_logical_sector_cache_entry_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_logical_sector_flush.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_logical_sector_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_logical_sector_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_memory_copy.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_memory_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_string_length_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fx_utility_token_length_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_attributes_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_attributes_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_default_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_default_get_copy.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_default_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_first_entry_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_first_full_entry_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_information_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_local_path_clear.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_local_path_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_local_path_get_copy.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_local_path_restore.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_local_path_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_long_name_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_long_name_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_name_test.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_next_entry_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_next_full_entry_find.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_rename.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_short_name_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_directory_short_name_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_fault_tolerant_enable.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_attributes_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_attributes_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_best_effort_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_close.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_date_time_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_extended_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_extended_best_effort_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_extended_relative_seek.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_extended_seek.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_extended_truncate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_extended_truncate_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_open.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_relative_seek.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_rename.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_seek.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_truncate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_truncate_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_file_write_notify_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_abort.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_cache_invalidate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_check.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_close.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_close_notify_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_exFAT_format.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_extended_space_available.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_flush.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_format.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_open.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_open_notify_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_read.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_space_available.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_volume_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_volume_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_volume_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_media_write.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_system_date_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_system_date_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_system_time_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_system_time_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_unicode_directory_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_unicode_directory_rename.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_unicode_file_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_unicode_file_rename.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_unicode_name_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_unicode_name_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_unicode_short_name_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/src/fxe_unicode_short_name_get_extended.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/filex/common/drivers/fx_stm32_levelx_nand_driver.c
+)
+set(ThreadX_Src
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_secure_stack_initialize.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_secure_stack_allocate.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_secure_stack_free.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_context_restore.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_context_save.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_interrupt_control.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_interrupt_disable.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_interrupt_restore.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_schedule.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_stack_build.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_system_return.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_timer_interrupt.S
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_initialize_high_level.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_initialize_kernel_enter.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_initialize_kernel_setup.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/txe_thread_secure_stack_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/txe_thread_secure_stack_free.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_stack_error_handler.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_stack_error_notify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_system_resume.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_block_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_block_pool_cleanup.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_block_pool_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_block_pool_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_block_pool_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_block_pool_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_block_pool_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_block_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_byte_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_byte_pool_cleanup.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_byte_pool_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_byte_pool_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_byte_pool_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_byte_pool_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_byte_pool_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_byte_pool_search.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_byte_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_event_flags_cleanup.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_event_flags_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_event_flags_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_event_flags_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_event_flags_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_event_flags_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_event_flags_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_event_flags_set_notify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_mutex_cleanup.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_mutex_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_mutex_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_mutex_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_mutex_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_mutex_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_mutex_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_mutex_priority_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_mutex_put.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_cleanup.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_flush.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_front_send.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_receive.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_send.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_queue_send_notify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_ceiling_put.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_cleanup.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_put.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_semaphore_put_notify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_entry_exit_notify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_identify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_preemption_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_priority_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_relinquish.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_reset.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_resume.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_shell_entry.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_sleep.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_stack_analyze.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_suspend.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_system_preempt_check.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_system_suspend.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_terminate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_time_slice.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_time_slice_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_timeout.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_thread_wait_abort.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_time_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_time_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_block_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_block_pool_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_block_pool_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_block_pool_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_block_pool_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_block_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_byte_allocate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_byte_pool_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_byte_pool_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_byte_pool_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_byte_pool_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_byte_release.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_event_flags_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_event_flags_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_event_flags_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_event_flags_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_event_flags_set.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_event_flags_set_notify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_mutex_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_mutex_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_mutex_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_mutex_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_mutex_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_mutex_put.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_queue_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_queue_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_queue_flush.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_queue_front_send.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_queue_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_queue_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_queue_receive.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_queue_send.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_queue_send_notify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_semaphore_ceiling_put.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_semaphore_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_semaphore_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_semaphore_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_semaphore_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_semaphore_prioritize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_semaphore_put.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_semaphore_put_notify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_entry_exit_notify.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_preemption_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_priority_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_relinquish.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_reset.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_resume.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_suspend.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_terminate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_time_slice_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_thread_wait_abort.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_activate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_deactivate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_expiration_process.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_info_get.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_initialize.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_system_activate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_system_deactivate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/tx_timer_thread_entry.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_timer_activate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_timer_change.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_timer_create.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_timer_deactivate.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_timer_delete.c
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/src/txe_timer_info_get.c
+)
 # Link directories setup
 set(MX_LINK_DIRS
 
@@ -52,7 +583,7 @@ set(MX_LINK_DIRS
 # Project libraries
 set (MX_LINK_LIBS 
     STM32_Drivers
-    
+    LevelX	USBX	FileX	ThreadX	
 	# Path to the secure_nsclib object file generated by Secure project
 	${CMAKE_SOURCE_DIR}/../Secure_nsclib/secure_nsclib.o
 )
@@ -65,6 +596,26 @@ target_compile_definitions(stm32cubemx INTERFACE ${MX_Defines_Syms})
 add_library(STM32_Drivers OBJECT)
 target_sources(STM32_Drivers PRIVATE ${STM32_Drivers_Src})
 target_link_libraries(STM32_Drivers PUBLIC stm32cubemx)
+
+# Create LevelX static library
+add_library(LevelX OBJECT)
+target_sources(LevelX PRIVATE ${LevelX_Src})
+target_link_libraries(LevelX PUBLIC stm32cubemx)
+
+# Create USBX static library
+add_library(USBX OBJECT)
+target_sources(USBX PRIVATE ${USBX_Src})
+target_link_libraries(USBX PUBLIC stm32cubemx)
+
+# Create FileX static library
+add_library(FileX OBJECT)
+target_sources(FileX PRIVATE ${FileX_Src})
+target_link_libraries(FileX PUBLIC stm32cubemx)
+
+# Create ThreadX static library
+add_library(ThreadX OBJECT)
+target_sources(ThreadX PRIVATE ${ThreadX_Src})
+target_link_libraries(ThreadX PUBLIC stm32cubemx)
 
 
 # Add STM32CubeMX generated application sources to the project

@@ -13,13 +13,22 @@ set(MX_Include_Dirs
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Inc
     ${CMAKE_SOURCE_DIR}/../Drivers/CMSIS/Device/ST/STM32H5xx/Include
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Inc/Legacy
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/common/inc
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc
     ${CMAKE_SOURCE_DIR}/../Drivers/CMSIS/Include
 )
 # STM32CubeMX generated application sources
 set(MX_Application_Src
     ${CMAKE_SOURCE_DIR}/Core/Src/main.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/gpio.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/dcache.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/flash.c
     ${CMAKE_SOURCE_DIR}/Core/Src/gtzc_s.c
     ${CMAKE_SOURCE_DIR}/Core/Src/icache.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/octospi.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/threadx.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/tim.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/usb.c
     ${CMAKE_SOURCE_DIR}/Core/Src/stm32h5xx_it.c
     ${CMAKE_SOURCE_DIR}/Core/Src/stm32h5xx_hal_msp.c
     ${CMAKE_SOURCE_DIR}/Core/Src/secure_nsc.c
@@ -32,7 +41,7 @@ set(MX_Application_Src
 set(STM32_Drivers_Src
     ${CMAKE_SOURCE_DIR}/Core/Src/system_stm32h5xx_s.c
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_cortex.c
-    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_gtzc.c
+    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_dcache.c
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_rcc.c
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_rcc_ex.c
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_flash.c
@@ -44,11 +53,22 @@ set(STM32_Drivers_Src
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_pwr_ex.c
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal.c
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_exti.c
+    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_gtzc.c
     ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_icache.c
+    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_xspi.c
+    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_ll_dlyb.c
+    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_tim.c
+    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_tim_ex.c
+    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_pcd.c
+    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_hal_pcd_ex.c
+    ${CMAKE_SOURCE_DIR}/../Drivers/STM32H5xx_HAL_Driver/Src/stm32h5xx_ll_usb.c
 )
 
 # Drivers Midllewares
 
+set(ThreadX_Src
+    ${CMAKE_SOURCE_DIR}/../Middlewares/ST/threadx/ports/cortex_m33/gnu/src/tx_thread_secure_stack.c
+)
 # Link directories setup
 set(MX_LINK_DIRS
 
@@ -56,7 +76,7 @@ set(MX_LINK_DIRS
 # Project libraries
 set (MX_LINK_LIBS 
     STM32_Drivers
-    
+    ThreadX	
 )
 # Interface library for includes and symbols
 add_library(stm32cubemx INTERFACE)
@@ -67,6 +87,11 @@ target_compile_definitions(stm32cubemx INTERFACE ${MX_Defines_Syms})
 add_library(STM32_Drivers OBJECT)
 target_sources(STM32_Drivers PRIVATE ${STM32_Drivers_Src})
 target_link_libraries(STM32_Drivers PUBLIC stm32cubemx)
+
+# Create ThreadX static library
+add_library(ThreadX OBJECT)
+target_sources(ThreadX PRIVATE ${ThreadX_Src})
+target_link_libraries(ThreadX PUBLIC stm32cubemx)
 
 
 # Add STM32CubeMX generated application sources to the project
