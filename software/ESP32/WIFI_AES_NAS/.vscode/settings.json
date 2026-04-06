@@ -1,0 +1,17 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.openOcdConfigs": [
+    "board/esp32s3-bridge.cfg"
+  ],
+  "idf.portWin": "detect",
+  "idf.currentSetup": "E:/Espressif/frameworks/esp-idf-v5.1.2/",
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32s3"
+  },
+  "clangd.path": "E:\\Espressif\\tools\\esp-clang\\15.0.0-23786128ae\\esp-clang\\bin\\clangd.exe",
+  "clangd.arguments": [
+    "--background-index",
+    "--query-driver=**",
+    "--compile-commands-dir=c:\\Users\\E-cat\\Desktop\\ecat_usb_key\\software\\ESP32\\WIFI_AES_NAS\\build"
+  ]
+}
